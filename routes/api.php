@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDetailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,19 @@ Route::controller(UserDetailController::class)->group(function () {
    Route::put('/userdetails/country/{id}',       'country')->name('userdetails.country');
    Route::put('/userdetails/address/{id}',       'address')->name('userdetails.address');
    Route::put('/userdetails/phone/{id}',         'phone')->name('userdetails.phone');
+});
+
+Route::controller(UserController::class)->group(function () {
+   Route::get('/user',                  'index')->name('user.index'); 
+   Route::get('/user/{id}',             'show');
+   Route::post('/user',                 'store')->name('user.store');
+   Route::delete('/user/{id}',          'destroy');
+   Route::put('/user/name/{id}',        'name')->name('user.name');
+   Route::put('/user/avatar/{id}',      'avatar')->name('user.avatar');
+   Route::put('/user/username/{id}',    'username')->name('user.username');
+   Route::put('/user/email/{id}',       'email')->name('user.email');
+   Route::put('/user/password/{id}',    'password')->name('user.password');
+   Route::put('/user/is_admin/{id}',    'admin')->name('user.admin');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
