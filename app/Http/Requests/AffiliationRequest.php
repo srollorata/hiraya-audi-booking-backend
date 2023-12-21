@@ -21,13 +21,13 @@ class AffiliationRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (request()->routeIs('request.name')) {
+        if (request()->routeIs('affiliations.name')) {
             return [
                 'name'      => 'required|string|max:50',
             ];
-        } else if (request()->routeIs('request.store')) {
+        } else if (request()->routeIs('affiliations.store')) {
             return [
-                'name'         => 'required|string|max:50',
+                'name'         => 'max:50',
             ];
         }
     }

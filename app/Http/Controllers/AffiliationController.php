@@ -57,8 +57,6 @@ class AffiliationController extends Controller
         
         $validated = $request->validated();
 
-        $validated['name'] = $validated('name');
-
         $affiliation = Affiliation::create($validated);
 
         return $affiliation;

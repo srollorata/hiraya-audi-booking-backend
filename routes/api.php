@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AffiliationController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDetailController;
 use Illuminate\Http\Request;
@@ -49,8 +50,22 @@ Route::controller(UserController::class)->group(function () {
 Route::controller(AffiliationController::class)->group(function () {
     Route::get('/affiliations',             'index')->name('affiliations.index');
     Route::get('/affiliations/{id}',        'show')->name('affiliations.show');
+    Route::post('/affiliations',            'store')->name('affiliations.store');
     Route::delete('/affiliations/{id}',     'destroy')->name('affiliations.destroy');
     Route::put('/affiliations/name/{id}',   'name')->name('affiliations.name');
+});
+
+
+Route::controller(ClientController::class)->group(function () {
+    Route::get('/clients',                  'index')->name('clients.index'); 
+    Route::get('/clients/{id}',             'show')->name('clients.show');
+    Route::post('/clients',                 'store')->name('clients.store');
+    Route::delete('/clients/{id}',          'destroy')->name('clients.destroy');
+    Route::put('/clients/firstname/{id}',   'firstname')->name('clients.firstname');
+    Route::put('/clients/lastname/{id}',    'lastname')->name('clients.lastname');
+    Route::put('/clients/contact/{id}',     'contact')->name('clients.contact');
+    Route::put('/clients/email/{id}',       'email')->name('clients.email');
+    Route::put('/clients/affiliation/{id}', 'affiliationid')->name('clients.affiliationid');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
