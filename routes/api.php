@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AffiliationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDetailController;
 use Illuminate\Http\Request;
@@ -42,6 +43,14 @@ Route::controller(UserController::class)->group(function () {
    Route::put('/user/email/{id}',       'email')->name('user.email');
    Route::put('/user/password/{id}',    'password')->name('user.password');
    Route::put('/user/is_admin/{id}',    'admin')->name('user.admin');
+});
+
+
+Route::controller(AffiliationController::class)->group(function () {
+    Route::get('/affiliations',             'index')->name('affiliations.index');
+    Route::get('/affiliations/{id}',        'show')->name('affiliations.show');
+    Route::delete('/affiliations/{id}',     'destroy')->name('affiliations.destroy');
+    Route::put('/affiliations/name/{id}',   'name')->name('affiliations.name');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
