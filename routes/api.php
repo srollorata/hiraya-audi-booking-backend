@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AffiliationController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDetailController;
@@ -66,6 +67,16 @@ Route::controller(ClientController::class)->group(function () {
     Route::put('/clients/contact/{id}',     'contact')->name('clients.contact');
     Route::put('/clients/email/{id}',       'email')->name('clients.email');
     Route::put('/clients/affiliation/{id}', 'affiliationid')->name('clients.affiliationid');
+});
+
+Route::controller(BookingController::class)->group(function () {
+   Route::get('/booking',                  'index')->name('booking.index');
+   Route::get('/booking/{id}',             'show')->name('booking.show'); 
+   Route::post('/booking',                 'store')->name('booking.store');
+   Route::put('/booking/{id}',             'update')->name('booking.update');
+   Route::delete('/booking/{id}',          'destroy')->name('booking.destroy');
+   Route::put('/booking/status/{id}',      'status')->name('booking.status');
+
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
