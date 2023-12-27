@@ -64,6 +64,20 @@ class BookingRequest extends FormRequest
             return [
                 'client_id'      => 'required|integer',
             ];
+        } else if (request()->routeIs('booking.storeFormData')) {
+            return [
+                'date'                => 'required|date_format:Y-m-d',
+                'time'                => 'required|date_format:H:i:s',
+                'status'              => 'string',
+                'purpose'             => 'string|max:255',
+                'user_id'             => 'required|exists:users,id|',
+                'client_id'           => 'required|exists:clients,id|integer',
+                'first_name'          => 'required|string|max:255',
+                'last_name'           => 'required|string|max:255',
+                'contact_number'      => 'required|string|max:255',
+                'email'               => 'required|email|max:50',
+                'affiliation_id'      => 'required|exists:affiliation,id',
+            ];
         }
     }
 }

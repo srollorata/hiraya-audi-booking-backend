@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AffiliationController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
@@ -20,32 +21,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 // public api
+Route::post('/login', [AuthController::class, 'login'])->name('user.login');
+Route::post('/user',   [UserController::class,              'store'])->name('user.store');
 
-Route::controller(UserDetailController::class)->group(function () {
-   Route::get('/userdetails',                    'index')->name('userdetails.index');
-   Route::get('/userdetails/{id}',               'show');
-   Route::post('/userdetails',                   'store')->name('userdetails.store');
-   Route::delete('/userdetails/{id}',            'destroy');
-   Route::put('/userdetails/about/{id}',         'about')->name('userdetails.about');
-   Route::put('/userdetails/company/{id}',       'company')->name('userdetails.company');
-   Route::put('/userdetails/job/{id}',           'job')->name('userdetails.job');
-   Route::put('/userdetails/country/{id}',       'country')->name('userdetails.country');
-   Route::put('/userdetails/address/{id}',       'address')->name('userdetails.address');
-   Route::put('/userdetails/phone/{id}',         'phone')->name('userdetails.phone');
-});
 
-Route::controller(UserController::class)->group(function () {
-   Route::get('/user',                  'index')->name('user.index'); 
-   Route::get('/user/{id}',             'show');
-   Route::post('/user',                 'store')->name('user.store');
-   Route::delete('/user/{id}',          'destroy');
-   Route::put('/user/name/{id}',        'name')->name('user.name');
-   Route::put('/user/avatar/{id}',      'avatar')->name('user.avatar');
-   Route::put('/user/username/{id}',    'username')->name('user.username');
-   Route::put('/user/email/{id}',       'email')->name('user.email');
-   Route::put('/user/password/{id}',    'password')->name('user.password');
-   Route::put('/user/is_admin/{id}',    'admin')->name('user.admin');
-});
 
 
 Route::controller(AffiliationController::class)->group(function () {
@@ -72,13 +51,40 @@ Route::controller(ClientController::class)->group(function () {
 Route::controller(BookingController::class)->group(function () {
    Route::get('/booking',                  'index')->name('booking.index');
    Route::get('/booking/{id}',             'show')->name('booking.show'); 
-   Route::post('/booking',                 'store')->name('booking.store');
+   Route::post('/booking/store',           'store')->name('booking.store');
+   Route::post('/booking',                 'storeFormData')->name('booking.storeFormData');
    Route::put('/booking/{id}',             'update')->name('booking.update');
    Route::delete('/booking/{id}',          'destroy')->name('booking.destroy');
    Route::put('/booking/status/{id}',      'status')->name('booking.status');
-
+   
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout'])->name('user.logout');
+    
+    Route::controller(UserDetailController::class)->group(function () {
+       Route::get('/userdetails',                    'index')->name('userdetails.index');
+       Route::get('/userdetails/{id}',               'show');
+       Route::post('/userdetails',                   'store')->name('userdetails.store');
+       Route::delete('/userdetails/{id}',            'destroy');
+       Route::put('/userdetails/about/{id}',         'about')->name('userdetails.about');
+       Route::put('/userdetails/company/{id}',       'company')->name('userdetails.company');
+       Route::put('/userdetails/job/{id}',           'job')->name('userdetails.job');
+       Route::put('/userdetails/country/{id}',       'country')->name('userdetails.country');
+       Route::put('/userdetails/address/{id}',       'address')->name('userdetails.address');
+       Route::put('/userdetails/phone/{id}',         'phone')->name('userdetails.phone');
+    });
+    
+    Route::controller(UserController::class)->group(function () {
+       Route::get('/user',                  'index')->name('user.index'); 
+       Route::get('/profile',             'show');
+       Route::get('/user/details',          'getUserDetails');
+       Route::delete('/user/{id}',          'destroy');
+       Route::put('/user/name/{id}',        'name')->name('user.name');
+       Route::put('/user/avatar/{id}',      'avatar')->name('user.avatar');
+       Route::put('/user/username/{id}',    'username')->name('user.username');
+       Route::put('/user/email/{id}',       'email')->name('user.email');
+       Route::put('/user/password/{id}',    'password')->name('user.password');
+       Route::put('/user/is_admin/{id}',    'admin')->name('user.admin');
+    });
 });

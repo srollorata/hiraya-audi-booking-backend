@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -43,9 +45,9 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
-        return User::findOrFail($id);
+        return $request->user();
     }
 
     /**
@@ -169,5 +171,18 @@ class UserController extends Controller
         $user->save();
 
         return $user;
+    }
+
+
+    public function getUserDetails(Request $request){
+        
+        // get the currently logged user
+        $user = Auth::user();
+
+        // fetch the user details using users_id
+        $userDetails = DB::table('userdetails')->where('user_id', $user->id)->first();
+
+        // return the user details
+        return $userDetails;
     }
 }
