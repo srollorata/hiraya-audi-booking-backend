@@ -54,13 +54,17 @@ Route::controller(BookingController::class)->group(function () {
    Route::post('/booking/store',           'store')->name('booking.store');
    Route::post('/booking',                 'storeFormData')->name('booking.storeFormData');
    Route::put('/booking/{id}',             'update')->name('booking.update');
-   Route::delete('/booking/{id}',          'destroy')->name('booking.destroy');
    Route::put('/booking/status/{id}',      'status')->name('booking.status');
    
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('user.logout');
+    
+    Route::controller(BookingController::class)->group(function () {
+        Route::delete('/booking/{id}',          'destroy')->name('booking.destroy');
+        
+    });
     
     Route::controller(UserDetailController::class)->group(function () {
        Route::get('/userdetails',                    'index')->name('userdetails.index');
