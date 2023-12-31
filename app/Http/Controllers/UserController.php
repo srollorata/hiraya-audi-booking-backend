@@ -63,7 +63,28 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Update user avatar and name
+    $user = User::findOrFail($id)->user();
+    $user->avatar = $request->file('avatar')->storePublicly('images', 'public');
+    $user->name = $request->input('name');
+    $user->save();
+
+    // Update user details
+    $userDetails = $user->userDetails;
+    $userDetails->company = $request->input('company');
+    $userDetails->job = $request->input('job');
+    $userDetails->country = $request->input('country');
+    $userDetails->address = $request->input('address');
+    $userDetails->phone = $request->input('phone');
+    $userDetails->save();
+
+    $response = [
+        'user' => $user,
+        'userDetails' => $userDetails,
+        'message' => 'User updated successfully'
+    ];
+
+    return $response;
     }
 
     public function name(UserRequest $request, string $id)

@@ -71,7 +71,7 @@ class BookingRequest extends FormRequest
                 'status'              => 'string',
                 'purpose'             => 'string|max:255',
                 'user_id'             => 'required|exists:users,id|',
-                'client_id'           => 'required|exists:clients,id|integer',
+                
                 'first_name'          => 'required|string|max:255',
                 'last_name'           => 'required|string|max:255',
                 'contact_number'      => 'required|string|max:255',

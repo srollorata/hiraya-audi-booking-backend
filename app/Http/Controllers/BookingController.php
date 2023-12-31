@@ -100,8 +100,7 @@ class BookingController extends Controller
      * @throws None
      * @return array An array containing the stored form data and a success message.
      */
-    public function storeFormData(Request $request)
-{
+    public function storeFormData(Request $request){
     // Get the form data from the request
     $formData = $request->all();
     
@@ -112,35 +111,40 @@ class BookingController extends Controller
         'status' => $formData['status'],
         'purpose' => $formData['purpose'],
         'user_id' => $formData['user_id'],
-        'client_id' => $formData['client_id'],
         // Add more fields as needed
     ];
+
+    // Identify the client based on the given email
+    $client = DB::table('clients')->where('email', $formData['email'])->first();
+
+    if ($client) {
+        // If client is found, use the client ID
+        $bookingData['client_id'] = $client->id;
+    } else {
+        // If no client is found, create a new client
+        $newClient = [
+            'first_name' => $formData['first_name'],
+            'last_name' => $formData['last_name'],
+            'contact_number' => $formData['contact_number'],
+            'email' => $formData['email'],
+            'affiliation_id' => $formData['affiliation_id'],
+            // Add more fields as needed
+        ];
+        
+        $createdClient = DB::table('clients')->insertGetId($newClient);
+        
+        $bookingData['client_id'] = $createdClient;
+    }
 
     // Store the booking data in the "bookings" table
     DB::table('bookings')->insert($bookingData);
-   
 
-    // Store the form data in the "clients" table
-    $clientsData = [
-        'first_name'        => $formData['first_name'],
-        'last_name'         => $formData['last_name'],
-        'contact_number'    => $formData['contact_number'],
-        'email'             => $formData['email'],
-        'affiliation_id'    => $formData['affiliation_id'],
-        // Add more fields as needed
-    ];
-
-    // Store the client data in the "clients" table
-    DB::table('clients')->insert($clientsData);
-  
-    
     $response = [
         'bookingData' => $bookingData,
-        'clientsData' => $clientsData,
-        
         'message' => 'Form data stored successfully',
     ];
+    
     // Return a response indicating success
     return $response;
-}
+    }
 }
