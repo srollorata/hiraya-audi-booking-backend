@@ -3,9 +3,11 @@
 use App\Http\Controllers\AffiliationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingDetailsController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDetailController;
+use App\Http\Controllers\UserInfoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -61,9 +63,18 @@ Route::controller(BookingController::class)->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('user.logout');
     
+    Route::controller(UserInfoController::class)->group(function () {
+        Route::get('/userinfo',                  'index')->name('userinfo.index');
+        Route::get('/userinfo/{id}',             'show')->name('userinfo.show');
+    });
+
     Route::controller(BookingController::class)->group(function () {
         Route::delete('/booking/{id}',          'destroy')->name('booking.destroy');
-        
+    });
+
+    Route::controller(BookingDetailsController::class)->group(function () {
+        Route::get('/bookingdetails',                  'index')->name('bookingdetails.index');
+        Route::get('/bookingdetails/{id}',             'show')->name('bookingdetails.show');
     });
     
     Route::controller(UserDetailController::class)->group(function () {
@@ -77,6 +88,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
        Route::put('/userdetails/country/{id}',       'country')->name('userdetails.country');
        Route::put('/userdetails/address/{id}',       'address')->name('userdetails.address');
        Route::put('/userdetails/phone/{id}',         'phone')->name('userdetails.phone');
+       Route::put('/userdetails/user_id/{id}',       'userid')->name('userdetails.userid');
     });
     
     Route::controller(UserController::class)->group(function () {

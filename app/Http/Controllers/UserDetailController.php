@@ -101,6 +101,18 @@ class UserDetailController extends Controller
         return $userdetail;
     }
 
+    public function userid(UserDetailRequest $request, string $id)
+    {
+        $userdetail = UserDetails::findOrFail($id);
+        $validated = $request->validated();
+
+        $userdetail->user_id = $validated['user_id'];
+
+        $userdetail->save();
+
+        return $userdetail;
+    }
+
     /**
      * Updates the job of a user detail record.
      *

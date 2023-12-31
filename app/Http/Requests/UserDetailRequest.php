@@ -60,6 +60,10 @@ class UserDetailRequest extends FormRequest
             return [
                 'phone'      => 'string',
             ];
+        } else if (request()->routeIs('userdetails.userid')) {
+            return [
+                'user_id'      => 'required|integer|exists:users,id',
+            ];
         }
     }
 }
