@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserInfoRequest;
+use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserInfoController extends Controller
 {
@@ -28,6 +31,17 @@ class UserInfoController extends Controller
      */
     public function show(string $id){
         $users = UserInfo::findOrFail($id);
+
+        return $users;
+    }
+
+
+    public function update(UserInfoRequest $request, string $id){
+        $users = UserInfo::findOrFail($id);
+        $validated = $request->validated();
+
+        $users->update($validated);
+
 
         return $users;
     }

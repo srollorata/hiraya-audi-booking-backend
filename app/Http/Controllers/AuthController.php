@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -28,14 +31,34 @@ class AuthController extends Controller
                 'username' => ['The provided credentials are incorrect.'],
             ]);
         }
+        
+        // Create a new connection configuration
+        $config = app('config');
+        $connections = $config->get('database.connections');
+        $newConnection = $connections[$config->get('database.default')];
+        $newConnection['database'] = 'hiraya_simplified-backend';
+        $newConnection['username'] = $request->username;
+        $newConnection['password'] = $request->password;
+
+        // Set the new connection configuration
+        $config->set('database.connections.' .$request->username, $newConnection);
+
+        // Reconnect to the new database
+        DB::purge($request->username);
+        DB::reconnect($request->username);
+        Config::set('database.default', $request->username);
 
         $response = [
             'user' => $user,
-            'token' => $user->createToken($request->username)->plainTextToken
+            'token' => $user->createToken($request->username)->plainTextToken,
+            'message' => 'Logged in successfully, and Switched database connection '
         ];
+
+        
 
         return $response;
     }
+
 
     /**
      * Logout the user and delete all their tokens.
