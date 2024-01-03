@@ -11,5 +11,15 @@ class UserInfo extends Model
 
     protected $table = 'user_info';
     protected $primaryKey = 'id';
+    protected $fillable = [
+        'name',
+        'avatar',
+        'about',
+        'company',
+        'job',
+        'country',
+        'address',
+        'phone',
+    ];
     
 }

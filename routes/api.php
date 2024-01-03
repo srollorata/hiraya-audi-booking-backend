@@ -66,6 +66,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(UserInfoController::class)->group(function () {
         Route::get('/userinfo',                  'index')->name('userinfo.index');
         Route::get('/userinfo/{id}',             'show')->name('userinfo.show');
+        Route::put('/userinfo/{id}',             'update')->name('userinfo.update');
     });
 
     Route::controller(BookingController::class)->group(function () {
